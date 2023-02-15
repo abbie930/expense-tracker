@@ -1,0 +1,50 @@
+
+<div class="d-flex flex-column align-items-center mt-5">
+  <h4>請輸入你的支出</h4>
+
+  <ul class="expense-list list-group list-group-light mt-5" style="width: 600px">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="container expense-form mt-2">
+        <form action="/records" method="POST">
+          <div class="mb-3">
+            <label for="name" class="col-form-label col-form-label-lg mt-4">名稱<span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-lg" name="name" id="name" placeholder="午餐" aria-label="default input example" value="{{ record.name }}">
+          </div>
+
+        <div class="mb-3">
+          <label for="date" class="col-2 col-form-label" >日期*</label>
+          <input type="date" name="date" id="date" class="form-control form-control-lg" value="{{ record.date }}"
+          min="2023-01-01" max="2030-01-01" required>
+        </div>
+
+      <div class="mb-3">
+        <label for="categoryId" class="col-form-label col-form-label-lg mt-4">類別<span class="text-danger">*</span></label>
+        <select class="form-select" name="categoryId" id="categoryId" placeholder="2023/02/14" aria-label="Default select example" required>
+           <option value="">Select</option>
+         {{#each categories}}
+            <option value="{{this._id}}">{{this.name}}</option>
+         {{/each}}
+        </select>
+      </div>
+ 
+      <div class="mb-3">
+        <label for="amount" class="col-form-label col-form-label-lg mt-4">金額<span class="text-danger">*</span></label>
+        <input type="number" class="form-control form-control-lg" name="amount" id="amount" min="0" placeholder="$100" aria-label="default input example" value="{{ record.amount }}" required>
+      </div>
+  
+      <div class="text-center my-3">
+        <button type="submit" class="btn btn-major">
+          <i class="fa-sharp fa-solid fa-circle-plus me-2"></i>Add</button>
+        <button type="reset" class="btn btn-major"><i class="fa-solid fa-eraser me-2"></i>Clear</button>
+        <a href="/" class="btn btn-major"><i class="fa-solid fa-house"></i>
+        </button></a>
+      </div>
+      </form>
+    </div>
+  </ul>
+</div>
+
+{{!-- change input date default value to today --}}
+<script>
+  document.getElementById('date').value = new Date().toISOString().substring(0, 10);
+</script>
