@@ -5,13 +5,13 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 
 
-//get new record page
+// get new record page
 router.get('/new', async (req, res) => {
   const categories = await Category.find().lean()
   return res.render('new', { categories })
 })
 
-//create record
+// create record
 router.post('/', async (req, res) => {
   try {
     const mockUserId = "63eba5ab576f32517f1e58d4"
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-//get edit record page
+// get edit record page
 router.get('/:id/edit', async (req, res) => {
   try {
     const userId = '63eba5ab576f32517f1e58d4'
@@ -46,7 +46,7 @@ router.get('/:id/edit', async (req, res) => {
   }
 })
 
-//edit record
+// edit record
 router.put('/:id', async (req, res) => {
   try {
     const userId = '63eba5ab576f32517f1e58d4'
@@ -55,12 +55,12 @@ router.put('/:id', async (req, res) => {
     const record = req.body
     await Record.findOneAndUpdate({ _id, userId }, { ...record, userId })
     return res.redirect('/')
-  } catch (error) {
-    console.log(error)
+  } catch (err) {
+    console.log(err)
   }
 })
 
-//- 刪除record
+// delete record
 router.delete('/:id', async (req, res) => {
   try {
     const userId = '63eba5ab576f32517f1e58d4'
