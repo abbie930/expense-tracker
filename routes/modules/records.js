@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const dayjs = require('dayjs')
 const Record = require('../../models/record')
 const Category = require('../../models/category')
 
@@ -10,7 +11,7 @@ router.get('/new', async (req, res) => {
   return res.render('new', { categories })
 })
 
-//post new record
+//create record
 router.post('/', async (req, res) => {
   try {
     const mockUserId = "63eba5ab576f32517f1e58d4"
@@ -28,6 +29,21 @@ router.post('/', async (req, res) => {
   }
 })
 
-//
+//get edit record page
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const mockUserId = '63eba5ab576f32517f1e58d4'
+    const recordId = req.params.id
+    //get record data
+    const record = await Record.findById(recordId).lean()
+    //render category
+    const categories = await Category.find().lean()
+    //date format
+    record.date = dayjs(record.date).format('YYYY/MM/DD')
+    res.render('edit', { record, categories, categoryId: record.categoryId})
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 module.exports = router
