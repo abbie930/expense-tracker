@@ -2,6 +2,7 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const routes = require('./routes')
+const handlebarsHelpers = require('./config/handlebars-helpers')
 
 
 
