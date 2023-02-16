@@ -1,9 +1,8 @@
 const express = require('express')
 const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
-const routes = require('./routes')
+const methodOverride = require('method-override')
 const handlebarsHelpers = require('./config/handlebars-helpers')
-
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -11,6 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 require('./config/mongoose')
 
+const routes = require('./routes')
 const app = express()
 const port = 3000
 
@@ -20,6 +20,7 @@ app.set('view engine', 'handlebars')
 app.set('views', './views')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 app.use(routes)
 
 
