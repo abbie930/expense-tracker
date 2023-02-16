@@ -59,5 +59,16 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+//- 刪除record
+router.delete('/:id', async (req, res) => {
+  try {
+    const userId = '63eba5ab576f32517f1e58d4'
+    const _id = req.params.id
+    await Record.findOneAndDelete({ _id, userId })
+    res.redirect('/')
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 module.exports = router
