@@ -1,16 +1,38 @@
 const express = require('express')
 const router = express.Router()
+const dayjs = require('dayjs')
 
 const Record = require('../../models/record')
+const Category = require('../../models/category')
 
-// 定義首頁路由
+
+// home router
 router.get('/', async (req, res) => {
   try {
-    const records = await Record.find().lean()
-    res.render('index', { records })
-  } catch (error) {
-    console.log(error)
+    // get all category
+    const categories = await Category.find().lean()
+    // get categoryId data from dropdown list
+    const categorySelected = req.query.categoryId
+
+    //use populate() => let Record and Category associate
+    let recordList = await Record.find().populate('categoryId').lean().sort({ date: 'asc' })
+    const selectList = recordList.filter((record) => {
+      return record.categoryId._id.toString() === categorySelected
+    })
+    if (selectList.length > 0) {
+      recordList = selectList
+    }
+    //date format
+    recordList.forEach((data) => {
+      data.date = dayjs(data.date).format('YYYY/MM/DD')
+    })
+    //total amount
+    const totalAmount = recordList.reduce((acc, cur) => acc + cur.amount, 0)
+
+    res.render('index', { recordList, totalAmount, categories, categorySelected })
+  } catch (err) {
+    console.log(err)
   }
 })
-// 匯出路由模組
+
 module.exports = router
