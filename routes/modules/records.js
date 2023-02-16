@@ -32,7 +32,6 @@ router.post('/', async (req, res) => {
 //get edit record page
 router.get('/:id/edit', async (req, res) => {
   try {
-    const mockUserId = '63eba5ab576f32517f1e58d4'
     const recordId = req.params.id
     //get record data
     const record = await Record.findById(recordId).lean()
@@ -45,5 +44,20 @@ router.get('/:id/edit', async (req, res) => {
     console.log(err)
   }
 })
+
+//edit record
+router.put('/:id', async (req, res) => {
+  try {
+    const userId = '63eba5ab576f32517f1e58d4'
+    // const userId = req.user._id
+    const _id = req.params.id
+    const record = req.body
+    await Record.findOneAndUpdate({ _id, userId }, { ...record, userId })
+    return res.redirect('/')
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 
 module.exports = router
