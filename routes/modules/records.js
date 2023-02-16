@@ -32,9 +32,10 @@ router.post('/', async (req, res) => {
 //get edit record page
 router.get('/:id/edit', async (req, res) => {
   try {
-    const recordId = req.params.id
+    const userId = '63eba5ab576f32517f1e58d4'
+    const _id = req.params.id
     //get record data
-    const record = await Record.findById(recordId).lean()
+    const record = await Record.findOne({ _id, userId }).lean()
     //render category
     const categories = await Category.find().lean()
     //date format
