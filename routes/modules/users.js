@@ -20,25 +20,42 @@ router.post(
 
 // register verify
 router.post('/register', async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body
   try { 
-    const user = await User.findOne({ email })
-    if (user) {
-      console.log('User already exists.')
-      res.render('register', {
-        name,
-        email,
-        password,
-        confirmPassword,
-      })
-    } else {
-      await User.create({
-        name,
-        email,
-        password,
-      })
-      res.redirect('/')
-    }
+   const { name, email, password, confirmPassword } = req.body
+   const errors = []
+   if (!name || !email || !password || !confirmPassword) {
+     errors.push({ message: '所有欄位都是必填。' })
+   }
+   if (password !== confirmPassword) {
+     errors.push({ message: '密碼與確認密碼不相符！' })
+   }
+   if (errors.length) {
+     return res.render('register', {
+       errors,
+       name,
+       email,
+       password,
+       confirmPassword,
+     })
+   }
+   const user = await User.findOne({ email })
+   if (user) {
+     errors.push({ message: '這個 Email 已經註冊過了。' })
+     res.render('register', {
+       errors,
+       name,
+       email,
+       password,
+       confirmPassword,
+     })
+   } else {
+     await User.create({
+       name,
+       email,
+       password,
+     })
+     res.redirect('/')
+   }
   } catch (err) {
     console.log(err)
   }
@@ -52,6 +69,7 @@ router.get('/register', (req, res) => {
 // logout
 router.get('/logout', (req, res) => {
   req.logout()
+  req.flash('success_msg', '你已經成功登出。')
   res.redirect('/users/login')
 })
 
