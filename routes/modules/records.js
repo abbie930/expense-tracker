@@ -14,14 +14,14 @@ router.get('/new', async (req, res) => {
 // create record
 router.post('/', async (req, res) => {
   try {
-    const mockUserId = "63eba5ab576f32517f1e58d4"
+    const userId = req.user._id
     const { name, date, categoryId, amount } = req.body
     await Record.create({
       name,
       date,
       categoryId,
       amount,
-      userId: mockUserId,
+      userId
     })
     res.redirect('/')
   } catch (err) {
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
 // get edit record page
 router.get('/:id/edit', async (req, res) => {
   try {
-    const userId = '63eba5ab576f32517f1e58d4'
+    const userId = req.user._id
     const _id = req.params.id
     //get record data
     const record = await Record.findOne({ _id, userId }).lean()
@@ -49,8 +49,7 @@ router.get('/:id/edit', async (req, res) => {
 // edit record
 router.put('/:id', async (req, res) => {
   try {
-    const userId = '63eba5ab576f32517f1e58d4'
-    // const userId = req.user._id
+    const userId = req.user._id
     const _id = req.params.id
     const record = req.body
     await Record.findOneAndUpdate({ _id, userId }, { ...record, userId })
@@ -63,7 +62,7 @@ router.put('/:id', async (req, res) => {
 // delete record
 router.delete('/:id', async (req, res) => {
   try {
-    const userId = '63eba5ab576f32517f1e58d4'
+    const userId = req.user._id
     const _id = req.params.id
     await Record.findOneAndDelete({ _id, userId })
     res.redirect('/')
