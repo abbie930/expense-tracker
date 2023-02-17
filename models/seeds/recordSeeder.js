@@ -1,8 +1,14 @@
-const db = require('../../config/mongoose')
+const bcrypt = require('bcryptjs')
 const { users, records } = require('../recordList')
 const User = require('../user')
 const Category = require('../category')
 const Record = require('../record')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const db = require('../../config/mongoose')
 
 db.once('open', async () => {
   try {
@@ -11,9 +17,14 @@ db.once('open', async () => {
 
     await Promise.all(
       users.map(async (user, user_index) => {
+        const { name, email, password } = user
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
         // create user model
         const createdUser = await User.create({
-          ...user,
+          name,
+          email,
+          password: hashedPassword,
         })
         console.log('users created')
 
