@@ -9,9 +9,12 @@ const handlebarsHelpers = require('./config/handlebars-helpers')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-require('./config/mongoose')
 
 const routes = require('./routes')
+
+const usePassport = require('./config/passport')
+require('./config/mongoose')
+
 const app = express()
 const port = 3000
 
@@ -30,6 +33,9 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+
+usePassport(app)
+
 app.use(routes)
 
 
