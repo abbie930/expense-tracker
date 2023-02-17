@@ -4,7 +4,7 @@ const passport = require('passport')
 
 const User = require('../../models/user')
 
-//get login page
+// get login page
 router.get('/login', (req, res) => {
   res.render('login')
 })
@@ -18,9 +18,7 @@ router.post(
   })
 )
 
-
-
-//register verify
+// register verify
 router.post('/register', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body
   try { 
@@ -46,13 +44,16 @@ router.post('/register', async (req, res) => {
   }
 })
 
-
-//get register Page
+// get register Page
 router.get('/register', (req, res) => {
   res.render('register')
 })
 
-
+// logout
+router.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/users/login')
+})
 
 
 module.exports = router
