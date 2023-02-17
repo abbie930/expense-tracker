@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/abbie930/expense-tracker#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
     "dayjs": "^1.11.7",
