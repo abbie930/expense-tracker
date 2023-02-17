@@ -9,9 +9,29 @@ router.get('/login', (req, res) => {
 })
 
 
-//login router
-router.post('/login', (req, res) => {
-
+router.post('/register', async (req, res) => {
+  const { name, email, password, confirmPassword } = req.body
+  try { 
+    const user = await User.findOne({ email })
+    if (user) {
+      console.log('User already exists.')
+      res.render('register', {
+        name,
+        email,
+        password,
+        confirmPassword,
+      })
+    } else {
+      await User.create({
+        name,
+        email,
+        password,
+      })
+      res.redirect('/')
+    }
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 
