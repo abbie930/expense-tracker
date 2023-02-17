@@ -15,9 +15,13 @@
         <a class="navbar-brand" href="/">
           廣志の私帳 
         </a>
+        {{#if isAuthenticated}}
         <div class="d-flex flex-end">
           <a href="/users/logout" class="btn btn-dark">Logout</a>
-          </div>
+        </div>
+        {{else}}
+          <a href="/users/login" class="btn btn-dark">Login</a>
+        {{/if}}
       </div>
     </nav>
   {{{ body }}}
