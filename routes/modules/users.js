@@ -11,10 +11,18 @@ router.get('/login', (req, res) => {
 
 // add middleware to verify request login status
 router.post(
-  '/login',
+  '/login', (req, res ,next) => {
+    const { email, password } = req.body
+    if (!email || !password) {
+      req.flash('warning_msg', '請輸入 email 和密碼')
+      return res.redirect('/users/login')
+    }
+    next()
+  },
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/users/login',
+    failureFlash: true,
   })
 )
 
