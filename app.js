@@ -6,7 +6,6 @@ const methodOverride = require('method-override')
 const flash = require('connect-flash')
 const handlebarsHelpers = require('./config/handlebars-helpers')
 
-
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
@@ -19,14 +18,13 @@ require('./config/mongoose')
 const app = express()
 const port = 3000
 
-
 app.engine('handlebars', engine({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.set('views', './views')
 
 app.use(
   session({
-    secret: 'ThisIsMySecret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -48,7 +46,6 @@ app.use((req, res, next) => {
 })
 
 app.use(routes)
-
 
 app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
