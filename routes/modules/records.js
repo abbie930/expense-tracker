@@ -66,6 +66,7 @@ router.delete('/:id', async (req, res) => {
     const userId = req.user._id
     const _id = req.params.id
     await Record.findOneAndDelete({ _id, userId })
+    req.flash('success_msg', '刪除成功！')
     res.redirect('/')
   } catch (err) {
     console.log(err)
