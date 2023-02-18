@@ -5,23 +5,36 @@
   <form action="/">
     <div class="category-group input-group" style="width:400px">
       <select class="form-select" name="categoryId" id="categoryId" aria-label="Default select example" onchange='this.form.submit()'>
-      <option value="null">類別</option>
+      <option value="all" selected>類別</option>
         {{#each categories}}
-            <option value="{{this._id}}"{{#ifSelect this._id ../categorySelected}}selected{{/ifSelect}}>{{ this.name }}</option>
+          <option value="{{this._id}}"{{#ifSelect this._id ../categorySelected.categoryId}}selected{{/ifSelect}}>{{ this.name }}</option>
         {{/each}}
       </select>
     </div>
   </form>
+
+<div class="success-msg" style="width: 400px">
+  {{>message}}
+</div>
 
 {{!-- amount --}}
   <div class="total-amount d-flex flex-column align-items-center m-5">
     <h3>總金額</h3>
     <h1 class="total-amount">${{ totalAmount }}</h1>
   </div>
-
+  
 
 {{!-- recordList --}}
-  <ul class="record-list list-group list-group-light" style="width: 600px">
+  <ul class="record-list list-group list-group-light" style="width: 700px">
+    {{#if isEmptyRecord}}
+    <div class="row mx-auto">
+      <div class="wrong d-flex flex-column align-items-center mt-5">
+      <h1 class="mt-4 mb-3"><i class="fa-solid fa-file-pen fa-2x"></i></h1></a>
+        <h4 class="mt-2">沒有紀錄</h4>
+        <p>點即按鈕新增一筆</p>
+      </div>
+    </div>
+    {{/if}}
     {{#each recordList}}
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
@@ -33,16 +46,61 @@
       </div>
       <div class="d-flex justify-content-end">
         <h4 class="record-amount fw-bold align-self-center me-5">${{ this.amount }}</h4>
-        <a href="/records/{{this._id}}/edit"><button type="button" class="btn btn-dark"><i class="fa-solid fa-pen-to-square"></i></button></a>
-        <form action="/records/{{ this._id }}?_method=DELETE" method="POST">
-          <button type="submit" class="btn btn-dark mx-2"><i class="fa-regular fa-trash-can"></i></button>
-        </form>
+        <button type="button" class="btn btn-dark"><a href="/records/{{this._id}}/edit"><i class="fa-solid fa-pen-to-square text-white"></i></button></a>
+        <button type="submit" class="btn btn-dark mx-2" data-bs-toggle="modal"
+        data-bs-target="#m{{this._id}}"><i class="fa-regular fa-trash-can"></i></button>
       </div>
     </li>
     {{/each}}
   </ul>
-
-  <div class="add-btn">
-    <a href="/records/new" class="btn btn-lg btn-primary mt-5"><i class="fa-solid fa-circle-plus me-2"></i>新增支出</a>
+   <div class="add-btn">
+    <a href="/records/new" class="btn btn-lg btn-outline-primary mt-5"><i class="fa-solid fa-circle-plus me-2"></i>新增支出</a>
   </div>
 </div>
+
+
+{{! modals }}
+  {{#each recordList}}
+    <div
+      class="modal fade"
+      id="m{{this._id}}"
+      tabindex="-1"
+      aria-labelledby="DeleteMessageModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1
+              class="modal-title fs-5"
+              id="exampleModalLabel"
+            ><i class="fa-solid fa-triangle-exclamation"></i>&nbsp&nbsp Confirmation</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6>您確定要刪除此筆紀錄嗎?</h6>
+            <p class="font-weight-bold">{{this.name}}<br/>{{this.date}}</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-dark"
+              data-bs-dismiss="modal"
+            >取消</button>
+            <form
+              action="/records/{{this._id}}?_method=DELETE"
+              method="POST"
+              style="display: inline;"
+            >
+              <button type="submit" class="btn btn-danger">刪除</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
