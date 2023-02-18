@@ -4,7 +4,6 @@ const dayjs = require('dayjs')
 const Record = require('../../models/record')
 const Category = require('../../models/category')
 
-
 // get new record page
 router.get('/new', async (req, res) => {
   const categories = await Category.find().lean()
@@ -21,8 +20,9 @@ router.post('/', async (req, res) => {
       date,
       categoryId,
       amount,
-      userId
+      userId,
     })
+    req.flash('success_msg', '成功新增一筆支出！')
     res.redirect('/')
   } catch (err) {
     console.log(err)
@@ -40,7 +40,7 @@ router.get('/:id/edit', async (req, res) => {
     const categories = await Category.find().lean()
     //date format
     record.date = dayjs(record.date).format('YYYY/MM/DD')
-    res.render('edit', { record, categories, categoryId: record.categoryId})
+    res.render('edit', { record, categories, categoryId: record.categoryId })
   } catch (err) {
     console.log(err)
   }
@@ -53,6 +53,7 @@ router.put('/:id', async (req, res) => {
     const _id = req.params.id
     const record = req.body
     await Record.findOneAndUpdate({ _id, userId }, { ...record, userId })
+    req.flash('success_msg', '編輯成功！')
     return res.redirect('/')
   } catch (err) {
     console.log(err)
