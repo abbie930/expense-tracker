@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const express = require('express')
 const router = express.Router()
 const dayjs = require('dayjs')
@@ -10,21 +11,27 @@ const Category = require('../../models/category')
 router.get('/', async (req, res) => {
   try {
     const userId = req.user._id
-    // get all category
-    const categories = await Category.find().lean()
     // get categoryId data from dropdown list
-    const categorySelected = req.query.categoryId
+    const categorySelected = req.query
 
-    //use populate() => let Record and Category associate
-    let recordList = await Record.find({ userId }).populate('categoryId').lean().sort({ date: 'asc' })
+    const categories = await Category.find().lean()
+    let recordList = await Record.find({ userId })
+      .populate('categoryId')
+      .lean()
+      .sort({ date: 'asc' } && { categoryId: 'asc' })
 
-    const selectList = recordList.filter((record) => {
-      return record.categoryId._id.toString() === categorySelected
+      
+    // filter records by category
+    const recordSelected = recordList.filter((record) => {
+      return record.categoryId._id.toString() === categorySelected.categoryId
     })
 
-    if (selectList.length > 0) {
-      recordList = selectList
-    } 
+    if (categorySelected.categoryId) {
+      recordList = recordSelected
+    }
+
+    const isEmptyRecord = recordList.length ? false : true
+
     //date format
     recordList.forEach((data) => {
       data.date = dayjs(data.date).format('YYYY/MM/DD')
@@ -32,7 +39,7 @@ router.get('/', async (req, res) => {
     //total amount
     const totalAmount = recordList.reduce((acc, cur) => acc + cur.amount, 0)
 
-    res.render('index', { recordList, totalAmount, categories, categorySelected })
+    res.render('index', { recordList, totalAmount, categories, categorySelected, isEmptyRecord })
   } catch (err) {
     console.log(err)
   }
