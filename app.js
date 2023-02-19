@@ -47,6 +47,10 @@ app.use((req, res, next) => {
 
 app.use(routes)
 
+app.use((req, res) => {
+  res.status(404).render('404')
+})
+
 app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
 })
