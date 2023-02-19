@@ -4,7 +4,7 @@ const { engine } = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
-const handlebarsHelpers = require('./config/handlebars-helpers')
+const handlebarsHelpers = require('./helpers/handlebars-helpers')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
