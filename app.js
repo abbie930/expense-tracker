@@ -16,7 +16,7 @@ const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 3000
 
 app.engine('handlebars', engine({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -51,6 +51,6 @@ app.use((req, res) => {
   res.status(404).render('404')
 })
 
-app.listen(port, () => {
-  console.log(`Express is running on http://localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`Express is running on http://localhost:${PORT}`)
 })
