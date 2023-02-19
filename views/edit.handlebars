@@ -8,7 +8,7 @@
          <form action="/records/{{ record._id }}?_method=PUT" method="POST">
           <div class="mb-3">
             <label for="name" class="col-form-label col-form-label-lg mt-4">名稱<span class="text-danger">*</span></label>
-            <input type="text" class="form-control form-control-lg" name="name" id="name" placeholder="午餐" aria-label="default input example" value="{{ record.name }}">
+            <input type="text" class="form-control form-control-lg" name="name" id="name" maxlength="25" placeholder="午餐" aria-label="default input example" value="{{ record.name }}" required>
           </div>
 
         <div class="mb-3">
@@ -28,12 +28,12 @@
  
       <div class="mb-3">
         <label for="amount" class="col-form-label col-form-label-lg mt-4">金額<span class="text-danger">*</span></label>
-        <input type="number" class="form-control form-control-lg" name="amount" id="amount" min="0" placeholder="$100" aria-label="default input example" value="{{ record.amount }}" required>
+        <input type="number" class="form-control form-control-lg" name="amount" id="amount" onkeypress="return event.charCode >= 48" min="1" placeholder="$100" aria-label="default input example" value="{{ record.amount }}" required>
       </div>
   
       <div class="text-center my-3">
         <button type="submit" class="btn btn-major">
-          <i class="fa-solid fa-circle-check me-2"></i>Save
+          <i class="fa-solid fa-circle-check me-2"></i>送出
         </button>
         <a href="/" class="btn btn-major"><i class="fa-solid fa-house"></i>
         </button></a>
